@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreCustomBucketRequest;
-use App\Http\Requests\UpdateCustomBucketRequest;
+
 use App\Models\CustomBucket;
+use Illuminate\Http\Request;
 
 class CustomBucketController extends Controller
 {
@@ -27,7 +27,7 @@ class CustomBucketController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCustomBucketRequest $request)
+    public function store(Request $request)
     {
         //
     }
@@ -51,7 +51,7 @@ class CustomBucketController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCustomBucketRequest $request, CustomBucket $customBucket)
+    public function update(Request $request, CustomBucket $customBucket)
     {
         //
     }

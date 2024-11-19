@@ -9,4 +9,17 @@ class CustomBucket extends Model
 {
     /** @use HasFactory<\Database\Factories\CustomBucketFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'tema',
+        'color',
+        'image',
+        'size'
+    ];
+
+
+    public function bouquets()
+    {
+        return $this->hasMany(Bouquet::class);
+    }
 }

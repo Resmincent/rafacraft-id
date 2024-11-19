@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Controllers\BouquetController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CustomBucketController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SaleController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -14,6 +19,17 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+    Route::resource('categories', CategoryController::class);
+    Route::resource('custom_buckets', CustomBucketController::class);
+    Route::resource('bouqeuts', BouquetController::class);
+    Route::resource('products', ProductController::class);
+    Route::resource('sales', SaleController::class)->only([
+        'index',
+        'create',
+        'store',
+        'show',
+        'destroy',
+    ]);
 });
 
 

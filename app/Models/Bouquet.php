@@ -9,4 +9,15 @@ class Bouquet extends Model
 {
     /** @use HasFactory<\Database\Factories\BouquetFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'slug',
+    ];
+
+
+    public function customBucket()
+    {
+        return $this->belongsTo(CustomBucket::class);
+    }
 }
