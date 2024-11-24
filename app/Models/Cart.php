@@ -10,7 +10,18 @@ class Cart extends Model
     /** @use HasFactory<\Database\Factories\CartFactory> */
     use HasFactory;
 
-    protected $fillable = ['user_id', 'product_id', 'quantity', 'full_name', 'phone_number', 'address', 'city', 'pickup'];
+    protected $fillable = [
+        'user_id',
+        'product_id',
+        'quantity',
+        'full_name',
+        'phone_number',
+        'address',
+        'city',
+        'pickup',
+        'custom_bucket_id',
+        'item_type',
+    ];
 
     // Relasi ke Product
     public function product()
@@ -27,5 +38,10 @@ class Cart extends Model
     public function cartItems()
     {
         return $this->hasMany(CartItem::class);
+    }
+
+    public function customBucket()
+    {
+        return $this->belongsTo(CustomBucket::class);
     }
 }

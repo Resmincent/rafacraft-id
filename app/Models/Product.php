@@ -19,6 +19,7 @@ class Product extends Model
         'size',
         'price',
         'category_id',
+        'label',
     ];
 
     public function cartItems()

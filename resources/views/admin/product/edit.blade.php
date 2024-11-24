@@ -81,6 +81,26 @@
                                     <x-input-error for="size" class="mt-2" />
                                 </div>
 
+                                <!-- Label Radio Buttons -->
+                                <div class="mb-4">
+                                    <x-label value="{{ __('Label') }}" />
+                                    <div class="mt-2 space-y-2">
+                                        <label class="inline-flex items-center">
+                                            <input type="radio" name="label" value="best" class="form-radio h-5 w-5 text-indigo-600" {{ old('label', $product->label) == 'best' ? 'checked' : '' }}>
+                                            <span class="ml-2 text-gray-700">Best Product</span>
+                                        </label>
+                                        <label class="inline-flex items-center">
+                                            <input type="radio" name="label" value="special" class="form-radio h-5 w-5 text-indigo-600" {{ old('label', $product->label) == 'special' ? 'checked' : '' }}>
+                                            <span class="ml-2 text-gray-700">Special Product</span>
+                                        </label>
+                                        <label class="inline-flex items-center">
+                                            <input type="radio" name="label" value="" class="form-radio h-5 w-5 text-indigo-600" {{ old('label', $product->label) === null ? 'checked' : '' }}>
+                                            <span class="ml-2 text-gray-700">No Label</span>
+                                        </label>
+                                    </div>
+                                    <x-input-error for="label" class="mt-2" />
+                                </div>
+
                                 <!-- Thumbnail -->
                                 <div class="mb-4">
                                     <x-label for="thumbnail" value="{{ __('Thumbnail Produk*') }}" />

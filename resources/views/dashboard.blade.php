@@ -34,7 +34,7 @@
                         </div>
                         <div class="ml-4">
                             <h4 class="text-lg font-semibold text-gray-700">Product</h4>
-                            {{-- <p class="text-xl font-bold text-gray-900">{{ $widget['cars'] }}</p> --}}
+                            <p class="text-xl font-bold text-gray-900">{{ $count_product }}</p>
                         </div>
                     </div>
                 </div>
@@ -49,7 +49,7 @@
                         </div>
                         <div class="ml-4">
                             <h4 class="text-lg font-semibold text-gray-700">Category</h4>
-                            {{-- <p class="text-xl font-bold text-gray-900">{{ $widget['motorcycles'] }}</p> --}}
+                            <p class="text-xl font-bold text-gray-900">{{ $categories_count }}</p>
                         </div>
                     </div>
                 </div>
@@ -64,7 +64,7 @@
                         </div>
                         <div class="ml-4">
                             <h4 class="text-lg font-semibold text-gray-700">Isi Bouquet</h4>
-                            {{-- <p class="text-xl font-bold text-gray-900">{{ $widget['users'] }}</p> --}}
+                            <p class="text-xl font-bold text-gray-900">{{ $bqt_count }}</p>
                         </div>
                     </div>
                 </div>
@@ -72,86 +72,66 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Data Penjualan -->
-                <div>
-                    <div class="bg-white shadow-md hover:shadow-lg transition duration-300 transform hover:scale-105 rounded-lg">
-                        <h3 class="text-gray-600 text-xl font-semibold p-4">Data Penjualan</h3>
-                        <div class="overflow-x-auto p-4">
-                            <table class="min-w-full text-sm text-left text-gray-500">
-                                <thead class="bg-gray-100 text-gray-600 font-bold">
-                                    <tr>
-                                        <th class="px-4 py-2">ID Penjualan</th>
-                                        <th class="px-4 py-2">Nama Produk</th>
-                                        <th class="px-4 py-2">Kategori</th>
-                                        <th class="px-4 py-2">Status</th>
-                                        <th class="px-4 py-2">Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @php
-                                    $sales = [
-                                    ['id' => 'S001', 'product' => 'Laptop', 'category' => 'Elektronik', 'status' => 'Sukses', 'total' => 'Rp 15,000,000'],
-                                    ['id' => 'S002', 'product' => 'Kamera', 'category' => 'Fotografi', 'status' => 'Pending', 'total' => 'Rp 7,500,000'],
-                                    ['id' => 'S003', 'product' => 'Smartphone', 'category' => 'Elektronik', 'status' => 'Gagal', 'total' => 'Rp 8,000,000'],
-                                    ];
-                                    @endphp
-                                    @foreach ($sales as $sale)
-                                    <tr class="border-b hover:bg-gray-50">
-                                        <td class="px-4 py-2">{{ $sale['id'] }}</td>
-                                        <td class="px-4 py-2">{{ $sale['product'] }}</td>
-                                        <td class="px-4 py-2">{{ $sale['category'] }}</td>
-                                        <td class="px-4 py-2">
-                                            <span class="text-xs font-semibold px-2 py-1 rounded {{
-                                        $sale['status'] == 'Sukses' ? 'bg-green-100 text-green-800' :
-                                        ($sale['status'] == 'Pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') }}">
-                                                {{ $sale['status'] }}
-                                            </span>
-                                        </td>
-                                        <td class="px-4 py-2">{{ $sale['total'] }}</td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                <a href="{{ route('sales.index') }}">
+                    <div>
+                        <div class="bg-white shadow-md hover:shadow-lg transition duration-300 transform hover:scale-105 rounded-lg">
+                            <h3 class="text-gray-600 text-xl font-semibold p-4">Data Penjualan</h3>
+                            <div class="overflow-x-auto p-4">
+                                <table class="min-w-full text-sm text-left text-gray-500">
+                                    <thead class="bg-gray-100 text-gray-600 font-bold">
+                                        <tr>
+                                            <th class="px-4 py-2">Buyer</th>
+                                            <th class="px-4 py-2">Product Name</th>
+                                            <th class="px-4 py-2">Price</th>
+                                            <th class="px-4 py-2">Sale Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($sales as $sale)
+                                        <tr class="border-b hover:bg-gray-50">
+                                            <td class="px-4 py-2">{{ $sale->buyer_name }}</td>
+                                            <td class="px-4 py-2">{{ $sale->product->name }}</td>
+                                            <td class="px-4 py-2">{{ FormatRupiah($sale->sale_price) }}</td>
+                                            <td class="px-4 py-2">{{ $sale->sale_date }}</td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </a>
 
                 <!-- Isian bouquet Overview -->
-                <div>
-                    <div class="bg-white shadow-md hover:shadow-lg transition duration-300 transform hover:scale-105 rounded-lg">
-                        <h3 class="text-gray-600 text-xl font-semibold p-4">Isiian Bouquet</h3>
-                        <div class="overflow-x-auto p-4">
-                            <table class="min-w-full text-sm text-left text-gray-500">
-                                <thead class="bg-gray-100 text-gray-600 font-bold">
-                                    <tr>
-                                        <th class="px-4 py-2">Purchase ID</th>
-                                        <th class="px-4 py-2">Vendor Name</th>
-                                        <th class="px-4 py-2">Name</th>
-                                        <th class="px-4 py-2">Created</th>
-                                        <th class="px-4 py-2">Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @php
-                                    $purchases = [
-                                    ['id' => 'P001', 'vendor' => 'Vendor A', 'name' => 'John Doe', 'created' => '2024-11-15', 'total' => 'Rp 10,000,000'],
-                                    ['id' => 'P002', 'vendor' => 'Vendor B', 'name' => 'Jane Doe', 'created' => '2024-11-16', 'total' => 'Rp 5,000,000'],
-                                    ['id' => 'P003', 'vendor' => 'Vendor C', 'name' => 'Bob Smith', 'created' => '2024-11-17', 'total' => 'Rp 8,000,000'],
-                                    ];
-                                    @endphp
-                                    @foreach ($purchases as $purchase)
-                                    <tr class="border-b hover:bg-gray-50">
-                                        <td class="px-4 py-2">{{ $purchase['id'] }}</td>
-                                        <td class="px-4 py-2">{{ $purchase['vendor'] }}</td>
-                                        <td class="px-4 py-2">{{ $purchase['name'] }}</td>
-                                        <td class="px-4 py-2">{{ $purchase['created'] }}</td>
-                                        <td class="px-4 py-2">{{ $purchase['total'] }}</td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                <a href="{{ route('products.index') }}">
+                    <div>
+                        <div class="bg-white shadow-md hover:shadow-lg transition duration-300 transform hover:scale-105 rounded-lg">
+                            <h3 class="text-gray-600 text-xl font-semibold p-4">Product</h3>
+                            <div class="overflow-x-auto p-4">
+                                <table class="min-w-full text-sm text-left text-gray-500">
+                                    <thead class="bg-gray-100 text-gray-600 font-bold">
+                                        <tr>
+                                            <th class="px-4 py-2">Product Name</th>
+                                            <th class="px-4 py-2">Color</th>
+                                            <th class="px-4 py-2">Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($products as $product)
+                                        <tr class="border-b hover:bg-gray-50">
+                                            <td class="px-4 py-2">{{ $product->name}}</td>
+                                            <td class="px-4 py-2">
+                                                <div class="w-6 h-6 rounded-full border shadow-sm" style="background-color: {{ $product->color }}">
+                                            </td>
+                                            <td class="px-4 py-2">{{FormatRupiah($product->price)}}</td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
 
         </div>

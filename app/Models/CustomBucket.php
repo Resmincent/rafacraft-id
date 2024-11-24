@@ -14,7 +14,8 @@ class CustomBucket extends Model
         'tema',
         'color',
         'image',
-        'size'
+        'size',
+        'price'
     ];
 
 

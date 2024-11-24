@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
             <!-- Search Form -->
             <div class="mb-4">
-                <form action="{{ route('bouqeuts.index') }}" method="GET" class="flex gap-4">
+                <form action="{{ route('bouquets.index') }}" method="GET" class="flex gap-4">
                     <input type="text" name="search" value="{{ request('search') }}" class="rounded-lg border-gray-300 flex-1 h-[38px]" placeholder="Search bouquets...">
                     <button type="submit" class="inline-flex h-[38px] items-center px-4 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-white hover:bg-blue-600 focus:bg-blue-600 active:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150">
                         Search
@@ -77,7 +77,7 @@
                         </button>
                     </div>
                     <div class="p-4">
-                        <form action="{{ route('bouqeuts.update', $bouquet->id) }}" method="POST" class="space-y-4">
+                        <form action="{{ route('bouquets.update', $bouquet->id) }}" method="POST" class="space-y-4">
                             @csrf
                             @method('PUT')
                             <div>
@@ -114,7 +114,7 @@
                         <h3 class="mb-5 text-lg font-normal text-gray-500">
                             Are you sure you want to delete this bouquet?
                         </h3>
-                        <form action="{{ route('bouqeuts.destroy', $bouquet->id) }}" method="POST" class="inline">
+                        <form action="{{ route('bouquets.destroy', $bouquet->id) }}" method="POST" class="inline">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="text-white bg-red-600 hover:bg-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
@@ -146,7 +146,7 @@
                     </button>
                 </div>
                 <div class="p-4">
-                    <form action="{{ route('bouqeuts.store') }}" method="POST" class="space-y-4">
+                    <form action="{{ route('bouquets.store') }}" method="POST" class="space-y-4">
                         @csrf
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Bouquet Name</label>

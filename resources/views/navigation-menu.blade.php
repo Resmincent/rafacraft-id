@@ -21,11 +21,14 @@
                     <x-nav-link href="{{ route('categories.index') }}" :active="request()->routeIs('categories.index')">
                         {{ __('Category') }}
                     </x-nav-link>
-                    <x-nav-link href="{{ route('bouqeuts.index') }}" :active="request()->routeIs('bouqeuts.index')">
+                    <x-nav-link href="{{ route('bouquets.index') }}" :active="request()->routeIs('bouqeuts.index')">
                         {{ __('Bouquet') }}
                     </x-nav-link>
                     <x-nav-link href="{{ route('sales.index') }}" :active="request()->routeIs('sales.index')">
                         {{ __('Data Penjualan') }}
+                    </x-nav-link>
+                    <x-nav-link href="{{ route('home') }}" :active="request()->routeIs('sales.index')">
+                        {{ __('Home') }}
                     </x-nav-link>
                 </div>
             </div>

@@ -51,7 +51,7 @@
                 </x-button-login>
             </div>
             <div class="flex items-center justify-start mt-5" style="margin-bottom: 5px">
-                <a href="">
+                <a href="/">
                     <svg width="38" height="32" viewBox="0 0 38 32" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                         <rect width="38" height="32" fill="url(#pattern0_17_57)" />
                         <defs>
