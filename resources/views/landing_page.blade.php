@@ -73,7 +73,7 @@
     <!-- Main Container -->
     <div class="min-h-screen bg-white">
         <!-- Sidebar Overlay -->
-        <div x-show="open" class="fixed inset-0 z-50 overflow-hidden">
+        <div x-show="open" class="fixed inset-0 z-50 overflow-hidden" x-cloak>
             <div x-show="open" x-transition:enter="transition-opacity ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition-opacity ease-in duration-300" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="absolute inset-0 bg-slate-300 bg-opacity-75 transition-opacity"></div>
             <!-- Sidebar Content -->
             <section class="absolute inset-y-0 left-0 pr-10 max-w-full flex">
@@ -145,15 +145,17 @@
                         <!-- Sidebar Footer -->
                         <div class="flex items-center justify-center px-4 py-3 border-t border-gray-200 shadow-sm">
                             <div class="flex items-center justify-center">
-                                <svg width="32" height="32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                                    <rect width="100" height="100" fill="url(#pattern0_26_365)" />
-                                    <defs>
-                                        <pattern id="pattern0_26_365" patternContentUnits="objectBoundingBox" width="1" height="1">
-                                            <use xlink:href="#image0_26_365" transform="scale(0.01)" />
-                                        </pattern>
-                                        <image id="image0_26_365" width="100" height="100" xlink:href="data:image/png;base64,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" />
-                                    </defs>
-                                </svg>
+                                <a href="https://www.instagram.com/rafacraft.id/" target="_blank">
+                                    <svg width="32" height="32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                        <rect width="100" height="100" fill="url(#pattern0_26_365)" />
+                                        <defs>
+                                            <pattern id="pattern0_26_365" patternContentUnits="objectBoundingBox" width="1" height="1">
+                                                <use xlink:href="#image0_26_365" transform="scale(0.01)" />
+                                            </pattern>
+                                            <image id="image0_26_365" width="100" height="100" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAACXBIWXMAAAsTAAALEwEAmpwYAAAGFElEQVR4nO1dW28VVRT+aI08opRHIYj8CI0Y31TInOTgaTwpTSg8SDSR6oPBS0y4JVAq+qTlD7TllIhvvhD04Zx6eVMPUPGW0ppUYlsopnhJS8fsZJVMjszZa8+Z2bNnZn3Jemmns9fa3+zLWnuvVUAgEAgEAoFAIBAIBAKBQCAQhGEDgB0AdgM4BOAtx+QQgBdIR6VrLrERQC+AGoCbAPyMyE0A5wFUyIbMYwuAkwAWHehcv0NRNhwH0IMM4iEArwO440BH+jHLEtnWjYxgO4BvHOg4P2H5CsA2OI5nAdxyoLN8i9PYLjgKD8DfDnSSb1n+ArAHDo6MIpLhB0h5Bg6tGZ1MU7cBTAP4OWWZJl2i2rEAYKsLuynTBVwZPgrgNQBlmupckjKAw6TjDUPbJtPefb1hoOwcgCEAJQc63WOK0vUM6c61U31oqTl9XD+jTt6ul1GpAGgYTMGb0yDkJFPBTzI2Krw2o+Ui0+ZjtsnYyAyH1DNIxnsArgH4l2aAywAGAqQ0mAu81dhXL3PNeNGBDvYMZBjAWkgHDwSmr98Z9ivbraHGUGjIgQ72DER14J9t7LncQpzO/jFbZGxghNCnMzhVvcsIKq4/q2ybYcwQVs5TdjC+jtEEO64fwGkAE7TvvxJw7q7QHK9+dwrAPoP3HtfY9E/L82OMflBOc+LYzVDkcMwkVAGcA3A9ZI4PkzX6mxF6R7s29gO41+ZdzZbnBxntP2+DkFcYnRCXB14FcAHAXQMSwmSZRk47Yj4L+VtF1Dstz5YZH4c6Dk4cRxiOURxknO0wthQmt2hRflCbZSLlXsvaEbZBWdK09aYNQo5qlJjtkIheAF8kQESrfE5thU1fak15W7N1n9W0ofoqcRzTKDHTARl9NOf7luQn2iRE1XfGBY89KUL6AfxmkYzgiI5KSm4J6aWv1U9JfowY/MwtIVHWjBW6aKB8ng9JRulnKxHeF/TEC03IWcOO+44W3XYh7h6KPTUN3z1cdEKqBlvbeSKiy0DXLiJmgdnGIsOBzDUhF5gddZVCNlHxBIXUOW1NFJWQKnnPHDI2xaD3JiYpywajJFeEnGNOITtj1P1xAH8w2h0pIiEcB3B/AvofYLT7Q9EI6WME5r43XMC5UO/8VtP2GjN0nxtCTqc0OkxGyakiETKhecdKwnkYPQzn8XyRCJnUvONLC3Z8rdGhUSRCrmreMWrBjnGNDs0iEfKr5h3vW7BDF7L5RQjB/c5QnZU0PhBC+FPWmAN3ywo1ZTUysKjXi0SIbtu7Srfrk4JseyM4hgMJEnKQ0X6hHENO6KSZUDZSN91wbNd24UIn3ODiQEqjY4ppQ64ISSv8Ps9o9+MiEsI9oLoW0wHVI/Tl69or7AEVZ7flB0hRx7BRsZNJBjeomFtCqgY57gsUNu8yXMAPGlQjUs+9VGRCuNlIfsvu64DGT9lCROh2U51mfeWSEI8uPvuGskre9njgotw4FTJYjfC+SxH0zi0haV8lvS5XSf9PSj/jen8SMmuY+laIERL04KcskpGLdISkE3YqdPE5aTIuxVDuw4mEnSMG6cOdyHBCxTMXY8yhv+NCSpvtpM8a06PXyTI5fSZ+RjtxJukzrbToEbpRaJoWPcVMizYVZ9Ki0y4csI/OKmp08tgMFA5o0s9q9Exfgnrobq1YKxzAKa1xI4OlNTwDKTEWdGulNUBzse7rOONAx3kJCSfcY+Nu2X1UGArNZbyKnNcmqsCpX7/XxQJmjZxNXSXGNVifDsEehmXoquesy8WckFIC8CnTZisO4YOu0uhqfQRHSiXj09Qk01Z1vvMoUgJnL74uKpXso4yNlhJ59SZlYl9FiuimW4a+gczQVdFBhwspD5KfYRp9rrvwbyy2dRhzWnKo1PhSB3aoGeAxOIInY4o3+Rkuxv80HMMeUswvmNyl+J6T2GVQxiIPMg/gKTiOrQZbxCxL3aU1Q4cuSmvO42i5nbV/ChbEZjpXXsjJ9HQ0Tacv7tjXXvI/OHXTfUdkjqK25TRiUzaxnU7TXqYz+hPkEQ+lKCdIF6XTc7YOlwQCgUAgEAgEAoFAIBAIBAJkFP8BP1d47SOyrzsAAAAASUVORK5CYII=" />
+                                        </defs>
+                                    </svg>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -222,6 +224,13 @@
             </div>
         </div>
     </footer>
+
+    <style>
+        [x-cloak] {
+            display: none !important;
+        }
+
+    </style>
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>

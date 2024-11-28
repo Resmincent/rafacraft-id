@@ -34,11 +34,6 @@
         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
 
             <div class="flex items-center space-x-5">
-                <button x-on:click="open = true" class="px-4 py-2 text-black rounded-md">
-                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15" />
-                    </svg>
-                </button>
 
                 <a href='{{ route('home') }}'>
                     <x-rafa-logo class="block h-9 w-auto" />

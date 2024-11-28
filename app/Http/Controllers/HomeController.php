@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 
 class HomeController extends Controller
@@ -12,6 +13,10 @@ class HomeController extends Controller
         $bests = Product::where('label', 'best')->latest()->take(6)->get();
         $montlys = Product::where('label', 'special')->latest()->take(6)->get();
 
-        return view('home', compact('bests', 'montlys'));
+        $categories = Category::withCount('products')
+            ->orderBy('name')
+            ->get();
+
+        return view('home', compact('bests', 'montlys', 'categories'));
     }
 }

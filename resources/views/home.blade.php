@@ -22,14 +22,7 @@
 <body class="bg-gray-50 text-gray-800 font-sans antialiased">
 
     <nav class="bg-white border-b border-gray-300 dark:bg-gray-900 dark:border-gray-700 shadow-lg">
-        <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-
-            <div class="flex items-center space-x-5">
-                <a href='{{ route('home') }}'>
-                    <x-rafa-logo class="block h-9 w-auto" />
-                </a>
-            </div>
-
+        <div class="max-w-screen-xl flex flex-wrap items-center justify-end mx-auto p-4">
             <button data-collapse-toggle="navbar-default" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-default" aria-expanded="false">
                 <span class="sr-only">Open main menu</span>
                 <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
@@ -101,34 +94,79 @@
         </div>
     </nav>
     <!-- Main Container -->
-    <div class="min-h-screen bg-white">
-        <div class="max-w-7xl mx-auto py-1 px-4 sm:py-3 lg:py-5 sm:px-6 lg:px-8">
-            <h1 class="text-lg font-semibold my-5">Terlaris</h1>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                @foreach ($bests as $best)
-                @include('components.product-card-best', ['product' => $best])
-                @endforeach
-            </div>
-        </div>
-        <a href="{{ route('landing') }}">
-            <x-button-see class="mb-12 mt-12">
-                {{ __('See More') }}
-            </x-button-see>
-        </a>
-        <div class="max-w-7xl mx-auto py-1 px-4 sm:py-3 lg:py-5 sm:px-6 lg:px-8">
-            <h1 class="text-lg font-semibold my-5">Spesial Bulanan</h1>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                @foreach ($montlys as $montly)
-                @include('components.product-card-montly', ['product' => $montly])
-                @endforeach
-            </div>
-        </div>
-        <a href="{{ route('landing') }}">
-            <x-button-see class="mb-12 mt-12">
-                {{ __('See More') }}
-            </x-button-see>
-        </a>
+    <div class="flex min-h-screen bg-white">
+        <!-- Scrollable Left Column -->
+        <div class="w-1/3 bg-white overflow-y-auto max-h-screen p-6 border-r border-gray-200">
+            <div class="flex items-center justify-center py-8">
+                <!-- Tombol Kembali -->
+                <div class="flex items-center">
+                    <a href='{{ route('home') }}'>
+                        <x-rafa-logo />
+                    </a>
+                </div>
 
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                @foreach ($categories as $category)
+                <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-200 h-32">
+                    <form method="GET" action="{{ route('home') }}">
+                        <input type="hidden" name="category_id" value="{{ $category->id }}">
+                        <button type="submit" class="h-full w-full">
+                            <div class="h-full p-6 flex flex-col items-center justify-center">
+                                @if($category->cover)
+                                <img src="{{ asset('storage/' . $category->cover) }}" alt="{{ $category->name }}" class="w-8 h-8 mb-2 object-cover" />
+                                @else
+                                <div class="w-8 h-8 mb-2 rounded-full bg-gray-200"></div>
+                                @endif
+                                <h6 class="text-gray-800 text-base font-semibold text-center">{{ $category->name }}</h6>
+                            </div>
+                        </button>
+                    </form>
+                </div>
+                @endforeach
+            </div>
+        </div>
+
+        <!-- Right Column with Scrollable Content -->
+        <div class="w-2/3 overflow-y-auto max-h-screen">
+            <!-- Terlaris Section -->
+            <div class="max-w-7xl mx-auto py-1 px-4 sm:py-3 lg:py-5 sm:px-6 lg:px-8">
+                <h1 class="text-lg font-semibold my-5">Terlaris</h1>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3">
+                    @foreach ($bests as $best)
+                    @include('components.product-card-best', ['product' => $best])
+                    @endforeach
+                </div>
+            </div>
+
+            <!-- See More Button for Terlaris -->
+            <div class="flex justify-center my-6">
+                <a href="{{ route('landing') }}">
+                    <x-button-see>
+                        {{ __('See More') }}
+                    </x-button-see>
+                </a>
+            </div>
+
+            <!-- Spesial Bulanan Section -->
+            <div class="max-w-7xl mx-auto py-1 px-4 sm:py-3 lg:py-5 sm:px-6 lg:px-8">
+                <h1 class="text-lg font-semibold my-5">Spesial Bulanan</h1>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    @foreach ($montlys as $montly)
+                    @include('components.product-card-montly', ['product' => $montly])
+                    @endforeach
+                </div>
+            </div>
+
+            <!-- See More Button for Spesial Bulanan -->
+            <div class="flex justify-center my-6 pb-6">
+                <a href="{{ route('landing') }}">
+                    <x-button-see>
+                        {{ __('See More') }}
+                    </x-button-see>
+                </a>
+            </div>
+        </div>
     </div>
 
     <footer class="bg-[#C07CA5]">
