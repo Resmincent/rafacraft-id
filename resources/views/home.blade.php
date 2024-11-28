@@ -63,6 +63,14 @@
                             </svg>
                         </button>
                     </a>
+
+                    @if(auth()->check() && auth()->user()->is_admin)
+                    <a class="nav-link font-weight-bold text-gray-700" href="{{ route('dashboard') }}">
+                        <x-button-see>
+                            Dashboard Admin
+                        </x-button-see>
+                    </a>
+                    @endif
                 </div>
                 <!-- Dropdown menu -->
                 <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600" id="user-dropdown">

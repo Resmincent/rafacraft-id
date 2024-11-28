@@ -3,17 +3,15 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 
-
-class StoreBouquetRequest extends FormRequest
+class StoreSizeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return Auth::check();
+        return true;
     }
 
     /**
@@ -24,7 +22,7 @@ class StoreBouquetRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required',
+            'size' => 'required',
             'price' => 'required|numeric|min:0',
         ];
     }

@@ -2,41 +2,40 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreBouquetRequest;
-use App\Models\Bouquet;
+use App\Http\Requests\StoreSizeRequest;
+use App\Models\Size;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
-class BouquetController extends Controller
+class SizeController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $query = Bouquet::query();
+        $query = Size::query();
 
         if ($request->has('search')) {
             $searchTerm = $request->input('search');
-            $query->where('name', 'like', "%{$searchTerm}%");
+            $query->where('size', 'like', "%{$searchTerm}%");
         }
 
-        $bouquets = $query->paginate(10);
+        $sizes = $query->paginate(10);
 
-        return view('admin.bouquet.index', compact('bouquets'));
+        return view('admin.size.index', compact('sizes'));
     }
 
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreBouquetRequest $request)
+    public function store(StoreSizeRequest $request)
     {
         $data = $request->all();
-        $data['slug'] = Str::slug($data['name']);
-        Bouquet::create($data);
+        Size::create($data);
 
-        return redirect()->route('bouquets.index')->with('success', 'Bouquet created successfully');
+        return redirect()->route('sizes.index')->with('success', 'Bouquet created successfully');
     }
 
     /**
@@ -45,17 +44,17 @@ class BouquetController extends Controller
     public function update(Request $request, String $id)
     {
         $data = $request->validate([
-            'name' => 'required',
+            'size' => 'required',
             'price' => 'required|numeric|min:0',
         ]);
 
-        $bouquets = Bouquet::findOrFail($id);
+        $bouquets = Size::findOrFail($id);
 
         $data['slug'] = Str::slug($data['name']);
 
         $bouquets->update($data);
 
-        return redirect()->route('bouquets.index')->with('success', 'Bouquet updated successfully');
+        return redirect()->route('sizes.index')->with('success', 'Bouquet updated successfully');
     }
 
     /**
@@ -63,9 +62,9 @@ class BouquetController extends Controller
      */
     public function destroy(String $id)
     {
-        $bouquet = Bouquet::findOrFail($id);
+        $bouquet = Size::findOrFail($id);
         $bouquet->delete();
 
-        return redirect()->route('bouquets.index')->with('success', 'Bouquet deleted successfully');
+        return redirect()->route('sizes.index')->with('success', 'Bouquet deleted successfully');
     }
 }

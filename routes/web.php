@@ -12,7 +12,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\CheckoutController;
-
+use App\Http\Controllers\SizeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,6 +50,7 @@ Route::middleware([
     Route::resource('categories', CategoryController::class);
     Route::resource('bouquets', BouquetController::class);
     Route::resource('products', ProductController::class);
+    Route::resource('sizes', SizeController::class);
     Route::resource('sales', SaleController::class)->only([
         'index',
         'create',
@@ -65,9 +66,10 @@ Route::middleware([
     |--------------------------------------------------------------------------
     */
     // Custom Bucket Routes
-    Route::resource('custom-buckets', CustomBucketController::class);
-    Route::post('/custom-buckets/{customBucket}/add-to-cart', [CustomBucketController::class, 'addToCart'])
-        ->name('custom-buckets.add-to-cart');
+    Route::get('/custom-buckets/create', [CustomBucketController::class, 'create'])->name('custom-buckets.create');
+    Route::post('/custom-buckets', [CustomBucketController::class, 'store'])->name('custom-buckets.store');
+    Route::post('/custom-buckets/{customBucketId}/add-to-cart', [CustomBucketController::class, 'addToCart'])->name('custom-buckets.add-to-cart');
+
 
     // Cart Routes
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
@@ -75,6 +77,7 @@ Route::middleware([
     Route::put('/cart/{cartItem}', [CartController::class, 'updateCart'])->name('cart.update');
     Route::delete('/cart/{cartItem}', [CartController::class, 'removeFromCart'])->name('cart.remove');
     Route::patch('/cart/update/{cartItem}', [CartController::class, 'updateQuantity'])->name('cart.update');
+    Route::post('/custom-bucket/{customBucketId}/add-to-cart', [CartController::class, 'addCustomBucketToCart'])->name('custom-bucket.add-to-cart');
 
     // Checkout Routes
     Route::prefix('checkout')->name('checkout.')->group(function () {

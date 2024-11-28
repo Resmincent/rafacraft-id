@@ -56,6 +56,13 @@
                                 {{ $cartItems->count() }}
                             </span>
                         </a>
+                        @if(auth()->check() && auth()->user()->is_admin)
+                        <a class="nav-link font-weight-bold text-gray-700" href="{{ route('dashboard') }}">
+                            <x-button-see>
+                                Dashboard Admin
+                            </x-button-see>
+                        </a>
+                        @endif
                     </ul>
                 </div>
             </div>
@@ -120,7 +127,13 @@
                                     <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-200 h-32">
                                         <div class="h-full p-6 flex flex-col items-center justify-center">
                                             <svg width="30" height="30" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                                                <!-- SVG content tetap sama -->
+                                                <rect width="100" height="100" fill="url(#pattern0_26_258)" />
+                                                <defs>
+                                                    <pattern id="pattern0_26_258" patternContentUnits="objectBoundingBox" width="1" height="1">
+                                                        <use xlink:href="#image0_26_258" transform="scale(0.01)" />
+                                                    </pattern>
+                                                    <image id="image0_26_258" width="100" height="100" xlink:href="data:image/png;base64,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" />
+                                                </defs>
                                             </svg>
                                             <h6 class="text-gray-800 text-base font-semibold text-center">{{ _('Bouquet Custom') }}</h6>
                                         </div>
@@ -155,7 +168,7 @@
                 <form action="{{ route('landing') }}" method="GET" class="space-y-4">
                     <!-- Search Bar -->
                     <div class="relative">
-                        <input type="search" name="search" value="{{ request('search') }}" class="block w-full p-4 ps-12 text-base text-gray-900 border border-gray-200 rounded-xl bg-white shadow-sm focus:ring-2 focus:ring-[#C07CA5] focus:border-[#C07CA5] transition-all duration-200" placeholder="Search by product name or model..." />
+                        <input type="search" name="search" value="{{ request('search') }}" class="block w-full p-4 ps-12 text-base text-gray-900 border border-gray-200 rounded-xl bg-white shadow-sm focus:ring-2 focus:ring-[#C07CA5] focus:border-[#C07CA5] transition-all duration-200" placeholder="Search by product name, price or size..." />
                         <button type="submit" class="absolute end-2.5 bottom-2.5 px-6 py-2 text-sm font-medium text-white bg-[#C07CA5] rounded-lg hover:bg-[#A6698C] focus:ring-4 focus:ring-[#C07CA5]/50 transition-all duration-200">
                             Search
                         </button>

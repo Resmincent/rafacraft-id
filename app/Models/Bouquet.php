@@ -13,11 +13,12 @@ class Bouquet extends Model
     protected $fillable = [
         'name',
         'slug',
+        'price',
     ];
 
 
-    public function customBucket()
+    public function customBucketItems()
     {
-        return $this->belongsTo(CustomBucket::class);
+        return $this->hasMany(CustomBucketItem::class);
     }
 }

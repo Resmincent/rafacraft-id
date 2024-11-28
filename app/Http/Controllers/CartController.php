@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Cart;
 use App\Models\CartItem;
+use App\Models\CustomBucket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class CartController extends Controller
 {
@@ -14,14 +16,31 @@ class CartController extends Controller
     public function index()
     {
         $cart = $this->getOrCreateCart();
-        $cartItems = $cart->cartItems;
+        $cartItems = $cart->cartItems()->with(['product', 'customBucket'])->get();
+
+        // Debug: Periksa detail item keranjang
+        foreach ($cartItems as $item) {
+            Log::info('Detail Item Keranjang', [
+                'id' => $item->id,
+                'tipe_item' => $item->item_type,
+                'id_produk' => $item->product_id,
+                'id_custom_bucket' => $item->custom_bucket_id,
+                'produk' => $item->product ? $item->product->toArray() : null,
+                'custom_bucket' => $item->customBucket ? $item->customBucket->toArray() : null
+            ]);
+        }
+
         $total = $cartItems->sum(function ($item) {
-            return $item->product->price * $item->quantity;
+            if ($item->product) {
+                return $item->product->price * $item->quantity;
+            } elseif ($item->customBucket) {
+                return $item->customBucket->price * $item->quantity;
+            }
+            return 0;
         });
 
         return view('cart', compact('cartItems', 'total'));
     }
-
     // Menambahkan produk ke keranjang
     public function addToCart(Request $request, $productId)
     {
@@ -31,10 +50,12 @@ class CartController extends Controller
 
         $cart = $this->getOrCreateCart();
         $product = Product::findOrFail($productId);
-        $this->addOrUpdateCartItem($cart, $product, $request->input('quantity'));
+
+        $this->addOrUpdateCartItem($cart, $product, $request->input('quantity'), 'product');
 
         return redirect()->route('cart.index')->with('success', 'Produk berhasil ditambahkan ke keranjang.');
     }
+
 
     // Memperbarui kuantitas produk di keranjang
     public function updateQuantity(Request $request, $cartItemId)
@@ -65,17 +86,58 @@ class CartController extends Controller
     }
 
     // Menambahkan atau memperbarui item keranjang
-    private function addOrUpdateCartItem($cart, $product, $quantity)
+    public function addOrUpdateCartItem($cart, $item, $quantity, $itemType)
     {
-        $cartItem = $cart->cartItems()->where('product_id', $product->id)->first();
+        $itemId = $item->id;
+        $customBucketId = null;
+        $productId = null;
+
+        if ($itemType === 'custom_bucket') {
+            $customBucketId = $itemId;
+        } elseif ($itemType === 'product') {
+            $productId = $itemId;
+        }
+
+        // Tambahkan log debug
+        Log::info('Menambah Item Keranjang', [
+            'item_type' => $itemType,
+            'custom_bucket_id' => $customBucketId,
+            'product_id' => $productId
+        ]);
+
+        $cartItem = $cart->cartItems()
+            ->where(function ($query) use ($itemId, $itemType) {
+                if ($itemType === 'custom_bucket') {
+                    $query->where('custom_bucket_id', $itemId);
+                } elseif ($itemType === 'product') {
+                    $query->where('product_id', $itemId);
+                }
+            })
+            ->first();
 
         if ($cartItem) {
             $cartItem->increment('quantity', $quantity);
         } else {
             $cart->cartItems()->create([
-                'product_id' => $product->id,
+                'item_type' => $itemType,  // Pastikan ini diset dengan benar
                 'quantity' => $quantity,
+                'custom_bucket_id' => $customBucketId,
+                'product_id' => $productId,
             ]);
         }
+    }
+
+    public function addCustomBucketToCart(Request $request, $customBucketId)
+    {
+        $request->validate([
+            'quantity' => 'required|integer|min:1',
+        ]);
+
+        $cart = $this->getOrCreateCart();
+        $customBucket = CustomBucket::findOrFail($customBucketId);
+
+        $this->addOrUpdateCartItem($cart, $customBucket, $request->input('quantity'), 'custom_bucket');
+
+        return redirect()->route('cart.index')->with('success', 'Custom bucket berhasil ditambahkan ke keranjang.');
     }
 }

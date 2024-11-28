@@ -24,10 +24,13 @@
                     <x-nav-link href="{{ route('bouquets.index') }}" :active="request()->routeIs('bouqeuts.index')">
                         {{ __('Bouquet') }}
                     </x-nav-link>
+                    <x-nav-link href="{{ route('sizes.index') }}" :active="request()->routeIs('bouqeuts.index')">
+                        {{ __('Size') }}
+                    </x-nav-link>
                     <x-nav-link href="{{ route('sales.index') }}" :active="request()->routeIs('sales.index')">
                         {{ __('Data Penjualan') }}
                     </x-nav-link>
-                    <x-nav-link href="{{ route('home') }}" :active="request()->routeIs('sales.index')">
+                    <x-nav-link href="{{ route('home') }}" :active="request()->routeIs('home')">
                         {{ __('Home') }}
                     </x-nav-link>
                 </div>

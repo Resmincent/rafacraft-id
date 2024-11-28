@@ -38,6 +38,11 @@ class CartItem extends Model
         return $this->belongsTo(CustomBucket::class);
     }
 
+    public function item()
+    {
+        return $this->morphTo();
+    }
+
     public function getPrice()
     {
         return $this->item_type === 'product'

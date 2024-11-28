@@ -2,31 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bouquet;
 use App\Models\CustomBucket;
 use App\Models\Cart;
+use App\Models\CartItem;
+use App\Models\CustomBucketItem;
+use App\Models\Size;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 
-
 class CustomBucketController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        // $customBuckets = CustomBucket::with('bouquets')->get();
-        // return view('custom-buckets.index', compact('customBuckets'));
-    }
-
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        return view('custom-buckets');
+        $data = new CustomBucket();
+        $sizes = Size::all();
+        $buckets = Bouquet::all();
+        return view('custom-buckets', compact('sizes', 'buckets', 'data'));
     }
 
     /**
@@ -34,12 +31,35 @@ class CustomBucketController extends Controller
      */
     public function store(Request $request)
     {
+        $size = Size::findOrFail($request->size_id);
+
+        $bouquetData = [];
+        $totalPrice = $size->price;
+
+        if ($request->has('bouquets')) {
+            $bouquetValidationRules = [];
+            $bouquetQuantities = $request->input('bouquet_quantities', []);
+
+            foreach ($request->bouquets as $bouquetId) {
+                $bouquet = Bouquet::findOrFail($bouquetId);
+                $quantity = $bouquetQuantities[$bouquetId] ?? 0;
+
+                if ($quantity > 0) {
+                    $bouquetData[] = [
+                        'bouquet_id' => $bouquetId,
+                        'quantity' => $quantity
+                    ];
+                    $totalPrice += $bouquet->price * $quantity;
+                }
+            }
+        }
+
         $validator = Validator::make($request->all(), [
             'tema' => 'required|string|max:255',
-            'color' => 'required|string|max:50',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'size' => 'required|string|in:small,medium,large',
-            'price' => 'required|numeric|min:0'
+            'size_id' => 'required|exists:sizes,id',
+            'bouquets' => 'required|array|min:1',
+            'bouquets.*' => 'exists:bouquets,id',
+            'image' => 'required|image|max:2048'
         ]);
 
         if ($validator->fails()) {
@@ -49,135 +69,78 @@ class CustomBucketController extends Controller
                 ->withInput();
         }
 
-        $imagePath = null;
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('custom-buckets', 'public');
+        $imagePath = $request->file('image')->store('custom-buckets', 'public');
+
+        $customBucket = CustomBucket::create([
+            'tema' => $request->tema,
+            'image' => $imagePath,
+            'size_id' => $request->size_id,
+            'price' => $totalPrice
+        ]);
+
+        foreach ($bouquetData as $item) {
+            CustomBucketItem::create([
+                'custom_bucket_id' => $customBucket->id,
+                'bouquet_id' => $item['bouquet_id'],
+                'quantity' => $item['quantity']
+            ]);
         }
 
-        CustomBucket::create([
-            'tema' => $request->tema,
-            'color' => $request->color,
-            'image' => $imagePath,
-            'size' => $request->size
-        ]);
+        // Automatically add to cart
+        $cart = $this->getOrCreateCart();
+        $this->addCustomBucketToCart($cart, $customBucket);
 
         return redirect()
             ->route('cart.index')
-            ->with('success', 'Custom bucket berhasil ditambahkan!');
+            ->with('success', 'Custom bucket berhasil dibuat dan ditambahkan ke keranjang!');
     }
 
     /**
-     * Display the specified resource.
+     * Add custom bucket to cart
      */
-    public function show(CustomBucket $customBucket)
+    public function addToCart(Request $request, $customBucketId)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(CustomBucket $customBucket)
-    {
-        // return view('custom-buckets.edit', compact('customBucket'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, CustomBucket $customBucket)
-    {
-        // $validator = Validator::make($request->all(), [
-        //     'tema' => 'required|string|max:255',
-        //     'color' => 'required|string|max:50',
-        //     'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        //     'size' => 'required|string|in:small,medium,large',
-        //     'price' => 'required|numeric|min:0'
-        // ]);
-
-        // if ($validator->fails()) {
-        //     return redirect()
-        //         ->back()
-        //         ->withErrors($validator)
-        //         ->withInput();
-        // }
-
-        // $data = $request->except('image');
-
-        // if ($request->hasFile('image')) {
-        //     // Delete old image
-        //     if ($customBucket->image) {
-        //         Storage::disk('public')->delete($customBucket->image);
-        //     }
-
-        //     // Store new image
-        //     $data['image'] = $request->file('image')->store('custom-buckets', 'public');
-        // }
-
-        // $customBucket->update($data);
-
-        // return redirect()
-        //     ->route('custom-buckets.index')
-        //     ->with('success', 'Custom bucket berhasil diperbarui!');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(CustomBucket $customBucket)
-    {
-        // Delete image if exists
-        if ($customBucket->image) {
-            Storage::disk('public')->delete($customBucket->image);
-        }
-
-        $customBucket->delete();
-
-        return redirect()
-            ->route('custom-buckets.index')
-            ->with('success', 'Custom bucket berhasil dihapus!');
-    }
-
-    public function addToCart(Request $request, CustomBucket $customBucket)
-    {
-        $validator = Validator::make($request->all(), [
+        $request->validate([
             'quantity' => 'required|integer|min:1',
         ]);
 
-        if ($validator->fails()) {
-            return redirect()
-                ->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
-
         $cart = $this->getOrCreateCart();
-        $this->addCustomBucketToCart($cart, $customBucket, $request->quantity);
+        $customBucket = CustomBucket::findOrFail($customBucketId);
+        $this->addCustomBucketToCart($cart, $customBucket, $request->input('quantity'));
 
-        return redirect()
-            ->route('cart.index')
-            ->with('success', 'Custom bucket berhasil ditambahkan ke keranjang!');
+        return redirect()->route('cart.index')->with('success', 'Custom bucket berhasil ditambahkan ke keranjang.');
     }
 
+    /**
+     * Get or create cart for current user
+     */
     private function getOrCreateCart()
     {
         return Auth::user()->cart ?: Cart::create(['user_id' => Auth::id()]);
     }
 
-    private function addCustomBucketToCart($cart, $customBucket, $quantity)
+    /**
+     * Add custom bucket to cart
+     */
+    private function addCustomBucketToCart($cart, $customBucket, $quantity = 1)
     {
-        $cartItem = $cart->cartItems()
+        $existingCartItem = CartItem::where('cart_id', $cart->id)
             ->where('custom_bucket_id', $customBucket->id)
-            ->where('item_type', 'custom_bucket')
             ->first();
 
-        if ($cartItem) {
-            $cartItem->increment('quantity', $quantity);
+        if ($existingCartItem) {
+            // Jika sudah ada, update quantity
+            $existingCartItem->update([
+                'quantity' => $existingCartItem->quantity + $quantity,
+                'item_type' => 'custom_bucket'  // Tambahkan ini
+            ]);
         } else {
-            $cart->cartItems()->create([
+            // Jika belum ada, buat cart item baru
+            CartItem::create([
+                'cart_id' => $cart->id,
                 'custom_bucket_id' => $customBucket->id,
                 'quantity' => $quantity,
-                'item_type' => 'custom_bucket'
+                'item_type' => 'custom_bucket'  // Tambahkan ini
             ]);
         }
     }

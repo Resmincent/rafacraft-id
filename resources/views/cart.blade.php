@@ -34,11 +34,6 @@
     <nav class="bg-white border-b border-gray-200 shadow-md">
         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
             <div class="flex items-center space-x-5">
-                <button class="p-2 hover:bg-gray-100 rounded-full transition-colors duration-200">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                </button>
                 <a href='{{ route('home') }}' class="transform hover:scale-105 transition-transform duration-200">
                     <x-rafa-logo class="block h-10 w-auto" />
                 </a>
@@ -90,13 +85,14 @@
                             <div class="space-y-6">
                                 @foreach($cartItems as $item)
                                 <div class="flex items-center space-x-6 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200">
+                                    @if ($item->item_type === 'product' && $item->product)
                                     <div class="flex-shrink-0">
-                                        <img src="{{ asset('storage/' . $item->product->thumbnail) }}" alt="{{ $item->product->name }}" class="w-24 h-24 object-cover rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200">
+                                        <img src="{{ $item->product->thumbnail ? asset('storage/' . $item->product->thumbnail) : asset('default-product-image.jpg') }}" alt="{{ $item->product->name ?? 'Product' }}" class="w-24 h-24 object-cover rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200">
                                     </div>
 
                                     <div class="flex-1">
-                                        <h3 class="text-lg font-semibold text-gray-800">{{ $item->product->name }}</h3>
-                                        <p class="text-[#C07CA5] font-medium mt-1">{{ formatRupiah($item->product->price) }}</p>
+                                        <h3 class="text-lg font-semibold text-gray-800">{{ $item->product->name ?? 'Unnamed Product' }}</h3>
+                                        <p class="text-[#C07CA5] font-medium mt-1">{{ $item->product ? formatRupiah($item->product->price) : 'N/A' }}</p>
 
                                         <div class="flex items-center space-x-4 mt-4">
                                             <form action="{{ route('cart.update', $item->id) }}" method="POST" class="flex items-center space-x-2">
@@ -129,6 +125,48 @@
                                     <div class="text-lg font-semibold text-gray-800">
                                         {{ formatRupiah($item->product->price * $item->quantity) }}
                                     </div>
+
+                                    @elseif ($item->item_type === 'custom_bucket')
+                                    <div class="flex-shrink-0">
+                                        <img src="{{ $item->customBucket->image ? asset('storage/' . $item->customBucket->image) : asset('default-bucket-image.jpg') }}" alt="{{ $item->customBucket->tema ?? 'Custom Bucket' }}" class="w-24 h-24 object-cover rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200">
+                                    </div>
+
+                                    <div class="flex-1">
+                                        <h3 class="text-lg font-semibold text-gray-800">{{ $item->customBucket->tema ?? 'Unnamed Bucket' }}</h3>
+                                        <p class="text-[#C07CA5] font-medium mt-1">{{ $item->customBucket ? formatRupiah($item->customBucket->price) : 'N/A' }}</p>
+                                        <div class="flex items-center space-x-4 mt-4">
+                                            <form action="{{ route('cart.update', $item->id) }}" method="POST" class="flex items-center space-x-2">
+                                                @csrf
+                                                @method('PATCH')
+                                                <div class="flex items-center border rounded-lg overflow-hidden">
+                                                    <button type="button" onclick="this.parentNode.querySelector('input').stepDown()" class="px-3 py-1 bg-gray-100 hover:bg-gray-200 transition-colors">
+                                                        -
+                                                    </button>
+                                                    <input type="number" name="quantity" value="{{ $item->quantity }}" min="1" class="w-16 text-center border-x py-1">
+                                                    <button type="button" onclick="this.parentNode.querySelector('input').stepUp()" class="px-3 py-1 bg-gray-100 hover:bg-gray-200 transition-colors">
+                                                        +
+                                                    </button>
+                                                </div>
+                                                <button type="submit" class="text-sm text-[#C07CA5] hover:text-[#A6698C] transition-colors">
+                                                    Update
+                                                </button>
+                                            </form>
+
+                                            <form action="{{ route('cart.remove', $item->id) }}" method="POST" class="flex-shrink-0">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-sm text-red-500 hover:text-red-700 transition-colors">
+                                                    Remove
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                    <div class="text-lg font-semibold text-gray-800">
+                                        {{ formatRupiah($item->customBucket->price * $item->quantity) }}
+                                    </div>
+
+                                    @endif
                                 </div>
                                 @endforeach
                             </div>

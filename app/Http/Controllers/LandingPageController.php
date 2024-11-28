@@ -24,7 +24,8 @@ class LandingPageController extends Controller
             $searchTerm = $request->input('search');
             $query->where(function ($q) use ($searchTerm) {
                 $q->where('name', 'like', "%{$searchTerm}%")
-                    ->orWhere('model', 'like', "%{$searchTerm}%")
+                    ->orWhere('size', 'like', "%{$searchTerm}%")
+                    ->orWhere('color', 'like', "%{$searchTerm}%")
                     ->orWhereHas('category', function ($q) use ($searchTerm) {
                         $q->where('name', 'like', "%{$searchTerm}%");
                     });

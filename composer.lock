@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b49dc643eb22dd90efb65d17f618b8a0",
+    "content-hash": "32c6e8600e7cccd7ac86835c56992881",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -1157,6 +1157,68 @@
                 }
             ],
             "time": "2023-12-03T19:50:20+00:00"
+        },
+        {
+            "name": "hedii/artisan-log-cleaner",
+            "version": "7.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hedii/artisan-log-cleaner.git",
+                "reference": "d41ffac27e6b1f29b7936f8dfa40057b31c1da09"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hedii/artisan-log-cleaner/zipball/d41ffac27e6b1f29b7936f8dfa40057b31c1da09",
+                "reference": "d41ffac27e6b1f29b7936f8dfa40057b31c1da09",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/console": "^11.0",
+                "illuminate/filesystem": "^11.0",
+                "illuminate/support": "^11.0",
+                "php": "^8.2"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^9.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Hedii\\ArtisanLogCleaner\\ArtisanLogCleanerServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Hedii\\ArtisanLogCleaner\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "hedii",
+                    "email": "contact@hedichaibi.com",
+                    "homepage": "https://hedichaibi.com"
+                }
+            ],
+            "description": "An artisan command to clear laravel log files",
+            "keywords": [
+                "artisan",
+                "artisan-log-cleaner",
+                "hedii",
+                "laravel",
+                "log",
+                "php"
+            ],
+            "support": {
+                "issues": "https://github.com/hedii/artisan-log-cleaner/issues",
+                "source": "https://github.com/hedii/artisan-log-cleaner"
+            },
+            "time": "2024-03-22T07:24:23+00:00"
         },
         {
             "name": "laravel/fortify",

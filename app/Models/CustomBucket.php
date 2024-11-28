@@ -13,14 +13,30 @@ class CustomBucket extends Model
     protected $fillable = [
         'tema',
         'color',
-        'image',
-        'size',
-        'price'
+        'price',
+        'bouquet_id',
+        'size_id',
+        'image'
     ];
 
 
+    public function customBucketItems()
+    {
+        return $this->hasMany(CustomBucketItem::class);
+    }
+
     public function bouquets()
     {
-        return $this->hasMany(Bouquet::class);
+        return $this->hasManyThrough(Bouquet::class, CustomBucketItem::class, 'custom_bucket_id', 'id', 'id', 'bouquet_id');
+    }
+
+    public function size()
+    {
+        return $this->belongsTo(Size::class);
+    }
+
+    public function cartItems()
+    {
+        return $this->hasMany(CartItem::class);
     }
 }
