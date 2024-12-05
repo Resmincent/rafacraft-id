@@ -152,7 +152,7 @@
             <div class="max-w-7xl mx-auto py-1 px-4 sm:py-3 lg:py-5 sm:px-6 lg:px-8">
                 <h1 class="text-lg font-semibold my-5">Spesial Bulanan</h1>
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    @foreach ($montlys as $montly)
+                    @foreach ($monthlys as $montly)
                     @include('components.product-card-montly', ['product' => $montly])
                     @endforeach
                 </div>

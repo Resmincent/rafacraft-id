@@ -14,6 +14,7 @@ use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\SizeController;
 
+
 /*
 |--------------------------------------------------------------------------
 | Public Routes
@@ -26,6 +27,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 // Policy Routes
 Route::view('/terms-of-service', 'policy.terms')->name('terms.show');
 Route::view('/privacy-policy', 'policy.privacy')->name('policy.show');
+Route::get('sales/export', [SaleController::class, 'export'])->name('sales.export');
 
 /*
 |--------------------------------------------------------------------------
@@ -58,6 +60,7 @@ Route::middleware([
         'show',
         'destroy',
     ]);
+
 
 
     /*

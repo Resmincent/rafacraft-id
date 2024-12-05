@@ -42,7 +42,13 @@
                 @endif
 
                 <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-lg font-medium">Sales</h3>
+                    <div class="justify-start">
+                        <h3 class="text-lg font-medium mb-4">Sales</h3>
+                        <a href="{{ route('sales.export') }}" class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-150 ease-in-out">
+                            Export to Excel
+                        </a>
+                    </div>
+
                     <a href="{{ route('sales.create') }}" class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-150 ease-in-out">
                         Add Sale
                     </a>

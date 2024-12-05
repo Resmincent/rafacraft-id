@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Sale;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Exports\SalesExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SaleController extends Controller
 {
@@ -85,5 +87,10 @@ class SaleController extends Controller
         $sale->delete();
 
         return redirect()->route('sales.destroy')->with('success', 'Penjualan berhasil dihapus.');
+    }
+
+    public function export()
+    {
+        return Excel::download(new SalesExport, 'data_penjualan_rafacraft.xlsx');
     }
 }
