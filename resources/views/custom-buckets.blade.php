@@ -74,20 +74,13 @@
                         <input type="text" name="tema" id="tema" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-[#C07CA5] focus:ring-[#C07CA5]" required>
                     </div>
 
-                    <!-- Image Upload with Preview -->
+                    <!-- Url input -->
+
                     <div>
-                        <label for="image" class="block text-sm font-medium text-gray-700">
-                            Referensi foto bouquet yang diinginkan
+                        <label for="url" class="block text-sm font-medium text-gray-700">
+                            Url untuk referensi
                         </label>
-                        <input type="file" name="image" id="image" accept="image/jpeg,image/png,image/jpg,image/gif" class="mt-1 block w-full text-sm text-gray-500
-                                      file:mr-4 file:py-2 file:px-4
-                                      file:rounded-full file:border-0
-                                      file:text-sm file:font-semibold
-                                      file:bg-[#C07CA5] file:text-white
-                                      hover:file:bg-[#a1638a]" required>
-                        <div id="image-preview" class="mt-4 flex justify-center">
-                            <img id="preview-img" class="hidden max-h-64 rounded-lg" src="" alt="Image Preview">
-                        </div>
+                        <input type="text" name="url" id="url" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-[#C07CA5] focus:ring-[#C07CA5]" placeholder="https://www.instagram.com/p/C8qdHH8yBvH/?img_index=1" required>
                     </div>
 
                     <!-- Size Selection -->
@@ -170,20 +163,6 @@
             const bouquetQuantities = document.querySelectorAll('.bouquet-quantity');
             const totalPriceInput = document.getElementById('total-price');
             const displayedPriceSpan = document.getElementById('displayed-price');
-            const imageInput = document.getElementById('image');
-            const previewImg = document.getElementById('preview-img');
-
-            imageInput.addEventListener('change', function(event) {
-                const file = event.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        previewImg.src = e.target.result;
-                        previewImg.classList.remove('hidden');
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
 
             bouquetCheckboxes.forEach((checkbox, index) => {
                 checkbox.addEventListener('change', function() {

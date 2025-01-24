@@ -16,7 +16,7 @@ class CustomBucket extends Model
         'price',
         'bouquet_id',
         'size_id',
-        'image'
+        'url'
     ];
 
 

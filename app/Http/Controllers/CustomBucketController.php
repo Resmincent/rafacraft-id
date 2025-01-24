@@ -56,10 +56,10 @@ class CustomBucketController extends Controller
 
         $validator = Validator::make($request->all(), [
             'tema' => 'required|string|max:255',
+            'url' => 'required|string|max:255',
             'size_id' => 'required|exists:sizes,id',
             'bouquets' => 'required|array|min:1',
             'bouquets.*' => 'exists:bouquets,id',
-            'image' => 'required|image|max:2048'
         ]);
 
         if ($validator->fails()) {
@@ -69,11 +69,10 @@ class CustomBucketController extends Controller
                 ->withInput();
         }
 
-        $imagePath = $request->file('image')->store('custom-buckets', 'public');
 
         $customBucket = CustomBucket::create([
             'tema' => $request->tema,
-            'image' => $imagePath,
+            'url' => $request->url,
             'size_id' => $request->size_id,
             'price' => $totalPrice
         ]);

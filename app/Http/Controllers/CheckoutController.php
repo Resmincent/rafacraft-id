@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bouquet;
 use App\Models\Cart;
+use App\Models\CustomBucketItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -122,12 +124,36 @@ class CheckoutController extends Controller
 
         $message .= "\n*Detail Pesanan:*\n";
         foreach ($cart->cartItems as $item) {
-            $itemName = $item->item_type === 'product'
-                ? $item->product->name
-                : $item->customBucket->name;
-            $price = $item->getPrice();
+            if ($item->item_type === 'product') {
+                $itemName = $item->product->name;
+                $price = $item->product->price;
+                $size = $item->product->size;
+                $url = $item->product->category->name;
+                $message .= "- {$itemName}\n";
+                $message .= "- Ukuran: {$size}\n";
+                $message .= "- Kategori Bucket: {$url}\n";
+            } elseif ($item->item_type === 'custom_bucket') {
+                $itemName = $item->customBucket->tema . " (Custom Bucket)";
+                $price = $item->customBucket->price;
+                $size = $item->customBucket->size->size;
+                $url = $item->customBucket->url;
+                $message .= "- {$itemName}\n";
+                $message .= "- Ukuran:  {$size}\n";
+                $message .= "- Referensi: {$url}\n";
 
-            $message .= "- {$itemName}\n";
+                $customBucketItems = CustomBucketItem::where('custom_bucket_id', $item->customBucket->id)->get();
+                if ($customBucketItems->count() > 0) {
+                    $message .= "Bouquet dalam Custom Bucket:\n";
+                    foreach ($customBucketItems as $bucketItem) {
+                        $bouquet = Bouquet::find($bucketItem->bouquet_id);
+                        $message .= "  - {$bouquet->name} (Qty: {$bucketItem->quantity})\n";
+                    }
+                }
+            } else {
+                continue;
+            }
+
+
             $message .= "  Jumlah: {$item->quantity} x Rp " . number_format($price, 0, ',', '.') . "\n";
             $message .= "  Subtotal: Rp " . number_format($price * $item->quantity, 0, ',', '.') . "\n\n";
         }
@@ -136,6 +162,7 @@ class CheckoutController extends Controller
 
         $message .= "Terima kasih telah berbelanja di Rafacraft!\n";
         $message .= "Pesanan Anda akan segera diproses.";
+
 
         return $message;
     }
